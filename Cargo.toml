@@ -1,0 +1,9 @@
+[workspace]
+members = [
+    "codasai-cli",
+    "codasai-web",
+    "codasai-types",
+    "codasai-server",
+    "codasai-cli-tests",
+]
+

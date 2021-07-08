@@ -1,0 +1,4 @@
+/target
+codasai-web/dist
+**/*.vim
+notes.txt

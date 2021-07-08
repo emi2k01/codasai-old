@@ -1,0 +1,4 @@
+setup:
+    trunk build --public-url "/public" ../codasai-web/index.html 
+    rm -rf ./static
+    cp -r ../codasai-web/dist/ ./static

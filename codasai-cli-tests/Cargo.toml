@@ -1,0 +1,11 @@
+[package]
+name = "codasai-cli-tests"
+version = "0.1.0"
+edition = "2018"
+
+[dependencies]
+mktemp = "0.4"
+ignore = "0.4"
+
+[dev-dependencies]
+k9 = "0.11"

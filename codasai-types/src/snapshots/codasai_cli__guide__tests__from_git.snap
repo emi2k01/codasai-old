@@ -1,0 +1,143 @@
+---
+source: codasai-cli/src/guide.rs
+expression: guide
+
+---
+Guide(
+  vfs: Vfs(
+    files: VfsFilesHandle([
+      VfsFile(
+        content: "+++\nfullscreen = true\n+++\n\n# Introdution\n\nIn this guide, we will see how to create a simple REST API to manage to-do\ntasks using [Rust](https://rust-lang.org) and [Rocket](https://rocket.rs).\n\nWe will see how to setup `Rocket` and use it manage a state (our tasks) and\nmodify it at our user\'s requests.\n\nThe purpose of this guide is only to give a brief introduction to `Rocket`. This\nmeans that writing a front-end, managing a database, caching of data, etc., is\nout of the scope of this guide.\n",
+      ),
+      VfsFile(
+        content: "+++\nfullscreen = true\n+++\n\n# Setup\n\nWe will start by creating a new Rust project using [Cargo](https://doc.rust-lang.org/stable/cargo/).\n\nOpen your terminal, go into your projects directory and run:\n\n$$$ create-project\n\nWe used `todo-guide` as the name of our project but you can use any name you want.\n",
+      ),
+      VfsFile(
+        content: "## Dependencies\n\nWe will use two dependencies for our web server: Rocket and [Serde](https://serde.rs/).\n\nWe already know that Rocket is a web framework but what is Serde? Well, in Serde words:\n\n> Serde is a framework for **ser**ializing and **de**serializing Rust data structures efficiently and generically.\n\nWe will use Serde to serialize (from Rust to JSON) and deserialize (from JSON to Rust) our data.\n\n### Declaring our dependencies\n\nWe used Cargo earlier to create our Rust project. That is because Cargo is the\nprogram that takes care of managing our project, including its dependencies and\nits build process.\n\nWe can how to declare our dependencies in the file [`Cargo.toml`](./Cargo.toml).\n\nThe file is mostly self-descriptive. The parts that might confuse us are the lines with `features = [...]`.\n\n### Libraries features\n\nTo avoid compiling unnecessary code, libraries can put code behind optional\nfeatures. In this case we are using the feature `json` of Rocket and the\nfeature `derive` of Serde.\n\nWe can see the documentation for the type\n[`Json`](https://docs.rs/rocket/0.5.0-rc.1/rocket/serde/json/struct.Json.html)\nin Rocket\'s documentation that explains what feature we have to activate to use it.\n\nSimilarly, we can see [Serde\'s manual](https://serde.rs/derive.html) that explains this feature.\n",
+      ),
+      VfsFile(
+        content: "[package]\nname = \"todo-guide\"\nversion = \"0.1.0\"\nauthors = [\"LuciferK7 <luciferk7@outlook.com>\"]\nedition = \"2018\"\n\n# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html\n\n[dependencies]\nserde = { version = \"1.0\", features = [\"derive\"] }\nrocket = { version = \"0.5.0-rc.1\", features = [\"json\"] }\n",
+      ),
+      VfsFile(
+        content: "fn main() {\n    println!(\"Hello, world!\");\n}\n",
+      ),
+      VfsFile(
+        content: "+++\nfullscreen = true\nfocus = \"/src/main.rs\"\n+++\n\n## Hello, world\n\nLets go over each of the elements we introduced in [`main.rs`](/src/main.rs)\n\n[[block \"/src/main.rs\" 1..3]]\n\nFirst we import the macros from Rocket. Macros have the form `#[...]`.\n`#[get(\"/\")]` and `#[launch]` are macros that were imported from Rocket.\n\nThese macros are used to generate code based on what item (structure, function,\n...) we used them on. We don\'t need to know about the internal details to use\nthem.\n\n[[end]]\n\n[[block \"/src/main.rs\" 4..7]]\n\nWe create an empty function. What\'s interesting here\nis the use of the `get` macro.\n\n`#[get(\"/hello\")]` is used to create a router handler. This causes our function\nto get executed everytime we get a GET HTTP request at `localhost:8000/hello` or\n`mywebsite.com/hello` or any other address you might want to use.\n\n[[end]]\n\n[[block \"/src/main.rs\" 8..13]]\n\nIn `rocket`, we configure the instance of our web\nserver. We use the function `build` to create a new instance of `Rocket` which\nholds the configuration of our web server.\n\nThe function `mount` is used to mount the routes handlers. The first parameter\naccepts the root path that it\'s going to handle and the second parameter accepts\nthe routes handlers.\n\nIf we instead decided to write `mount(\"/app\", routes![hello_world])`, then we\nwould listen only to requests under `localhost:8000/app/hello`.\n\nYou may have noticed that we didn\'t include a `main` function. That\'s because\nthe macro `#[launch]` makes the function `rocket` the entry point of our\nprogram. It takes care of launching the web server and setting up the async\nexecutor.\n\n[[end]]\n\n## Running it\n\nTo run our web server, just run:\n\n$$$ cargo-run\n\nIf you open your browser and visit [localhost:8000/hello](localhost:8000/hello),\nyou will see that our web server logs the request you just made!\n\n$$$ request-log\n",
+      ),
+      VfsFile(
+        content: "**/target/\ntodo-guide/.cargo\n\n",
+      ),
+      VfsFile(
+        content: "#[macro_use]\nextern crate rocket;\n\n#[get(\"/hello\")]\nfn hello_world() {\n}\n\n#[launch]\nfn rocket() -> _ {\n    rocket::build()\n        .mount(\"/\", routes![hello_world])\n}\n",
+      ),
+    ]),
+    snapshots: [
+      VfsSnapshot(
+        root: VfsRoot(VfsDirectory(
+          directories: {
+            ".cuadcode": VfsDirectory(
+              directories: {
+                "book": VfsDirectory(
+                  directories: {},
+                  files: {
+                    "introduction.md": 0,
+                  },
+                ),
+              },
+              files: {},
+            ),
+          },
+          files: {},
+        )),
+      ),
+      VfsSnapshot(
+        root: VfsRoot(VfsDirectory(
+          directories: {
+            ".cuadcode": VfsDirectory(
+              directories: {
+                "book": VfsDirectory(
+                  directories: {},
+                  files: {
+                    "introduction.md": 0,
+                    "setup.md": 1,
+                  },
+                ),
+              },
+              files: {},
+            ),
+          },
+          files: {},
+        )),
+      ),
+      VfsSnapshot(
+        root: VfsRoot(VfsDirectory(
+          directories: {
+            ".cuadcode": VfsDirectory(
+              directories: {
+                "book": VfsDirectory(
+                  directories: {},
+                  files: {
+                    "introduction.md": 0,
+                    "setup-dependencies.md": 2,
+                    "setup.md": 1,
+                  },
+                ),
+              },
+              files: {},
+            ),
+            "todo-guide": VfsDirectory(
+              directories: {
+                "src": VfsDirectory(
+                  directories: {},
+                  files: {
+                    "main.rs": 4,
+                  },
+                ),
+              },
+              files: {
+                "Cargo.toml": 3,
+              },
+            ),
+          },
+          files: {},
+        )),
+      ),
+      VfsSnapshot(
+        root: VfsRoot(VfsDirectory(
+          directories: {
+            ".cuadcode": VfsDirectory(
+              directories: {
+                "book": VfsDirectory(
+                  directories: {},
+                  files: {
+                    "introduction.md": 0,
+                    "setup-dependencies.md": 2,
+                    "setup-hello-world.md": 5,
+                    "setup.md": 1,
+                  },
+                ),
+              },
+              files: {},
+            ),
+            "todo-guide": VfsDirectory(
+              directories: {
+                "src": VfsDirectory(
+                  directories: {},
+                  files: {
+                    "main.rs": 7,
+                  },
+                ),
+              },
+              files: {
+                "Cargo.toml": 3,
+              },
+            ),
+          },
+          files: {
+            ".gitignore": 6,
+          },
+        )),
+      ),
+    ],
+  ),
+)
