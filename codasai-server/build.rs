@@ -3,10 +3,9 @@ use std::env;
 fn main() {
     if is_static_dir_empty().unwrap_or(true) {
         println!(
-            "cargo:warning=Run `just codasai-server/setup` before compiling this crate or build \
-             with `just build`.\nThis assumes you're in the root directory of the project."
+            "cargo:warning=Run `cargo xtask setup` before compiling this crate or build \
+             with `cargo xtask build`."
         );
-        std::process::exit(1);
     }
 }
 

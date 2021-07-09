@@ -1,0 +1,10 @@
+[package]
+name = "xtask"
+version = "0.1.0"
+edition = "2018"
+
+[dependencies]
+xshell = "0.1"
+structopt = "0.3"
+colored = "2"
+fs_extra = "1.2.0"
