@@ -4,14 +4,16 @@ use codasai_cli_tests::{Project, WildStr};
 fn page_save_simple() {
     let project = Project::new();
     project.run("init", &["Simple guide"]);
+    project.run("page", &["new", "Introduction"]);
     let output = project.run("page", &["save", "-m", "Page: Introduction"]);
 
     assert_eq!(
         WildStr::from(output.stdout()),
         "[..] Page: Introduction
- 2 files changed, 1 insertion(+)
+ 3 files changed, 3 insertions(+)
  create mode 100644 .codasai/guide.toml
  create mode 100644 .codasai/rev.toml
+ create mode 100644 _pages/introduction.md
 "
     );
 
@@ -24,6 +26,7 @@ fn page_save_simple() {
     guide.toml
     rev.toml
 _pages/
+    introduction.md
 "
     );
 }

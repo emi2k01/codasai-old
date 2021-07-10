@@ -7,10 +7,11 @@ use anyhow::{bail, Context, Result};
 use git2::Repository;
 use indoc::writedoc;
 use slug::slugify;
-use toml_edit as toml;
+use toml_edit;
 
+use crate::config::PageConfig;
 use crate::opts::{PageNewOpts, PageOpts, PageSaveOpts, PageSubcmd};
-use crate::util::path;
+use crate::util::{self, path};
 
 pub fn page(opts: &PageOpts) -> Result<()> {
     match opts.subcmd {
@@ -52,14 +53,29 @@ pub fn new(opts: &PageNewOpts) -> Result<()> {
     .with_context(|| format!("failed to write to file at {:?}", new_page_path))?;
 
     let rev_toml_path = path::dotcodasai()?.join("rev.toml");
-    let mut rev_toml = fs::read_to_string(&rev_toml_path)?.parse::<toml::Document>()?;
-    rev_toml["page_path"] = toml::value(new_page_path.to_string_lossy().into_owned());
+    let mut rev_toml = fs::read_to_string(&rev_toml_path)?.parse::<toml_edit::Document>()?;
+    rev_toml["page_path"] = toml_edit::value(new_page_path.to_string_lossy().into_owned());
     fs::write(&rev_toml_path, rev_toml.to_string().as_bytes())?;
 
     Ok(())
 }
 
 pub fn save(opts: &PageSaveOpts) -> Result<()> {
+    let rev_toml_path = util::path::dotcodasai()?
+        .join("rev.toml")
+        .canonicalize()
+        .context("failed to canonicalize path to rev.toml")?;
+    let rev_toml_string = fs::read_to_string(&rev_toml_path).context("failed to read rev.toml")?;
+    let rev_toml: PageConfig = toml::from_str(&rev_toml_string).context("failed to parse rev.toml")?;
+
+    if rev_toml.page_path.to_str() == Some("") {
+        bail!("you have not created a page yet");
+    }
+
+    if !rev_toml.page_path.exists() {
+        bail!("page `{}` does not exist", rev_toml.page_path.display());
+    }
+
     Command::new("git").args(&["add", "-A"]).output()?;
 
     let mut commit_command = Command::new("git");

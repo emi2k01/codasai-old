@@ -42,10 +42,14 @@ fn create_dotcodasai_dir(title: &str) -> Result<()> {
     )?;
 
     // .codasai/rev.toml
-    fs::OpenOptions::new()
+    let mut guide_toml = fs::OpenOptions::new()
         .create(true)
         .write(true)
         .open("./.codasai/rev.toml")?;
+
+    write!(
+        guide_toml, "page_path = \"\"",
+    )?;
 
     Ok(())
 }
