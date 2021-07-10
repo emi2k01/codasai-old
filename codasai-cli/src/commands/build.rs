@@ -56,7 +56,7 @@ fn guide_from_git(repo_path: impl AsRef<Path>) -> Result<Guide> {
 
     let mut rev_walker = repo.revwalk()?;
     rev_walker.set_sorting(git2::Sort::REVERSE)?;
-    rev_walker.push_head()?;
+    rev_walker.push_head().context("you have not saved any page")?;
     let revs = rev_walker.filter_map(Result::ok).collect::<Vec<_>>();
 
     // Populate first snapshot with first rev
