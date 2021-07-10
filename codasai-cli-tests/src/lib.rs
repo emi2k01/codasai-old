@@ -6,6 +6,9 @@ use std::process::{Command, Stdio};
 
 use mktemp::Temp;
 
+mod wild;
+pub use wild::WildStr;
+
 const CODASAI_CLI: &str = concat!(env!("CARGO_MANIFEST_DIR"), "/../target/debug/codasai-cli");
 const TMP_DIR: &str = concat!(env!("CARGO_MANIFEST_DIR"), "/../target/debug/tmp");
 
