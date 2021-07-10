@@ -4,6 +4,7 @@ use codasai_cli_tests::Project;
 fn build_simple() {
     let project = Project::new();
     project.run("init", &["Simple guide"]);
+    project.run("page", &["new", "Introduction"]);
     project.run("page", &["save", "-m", "\"Page: Introduction\""]);
     let output = project.run("build", &[]);
 
@@ -14,13 +15,13 @@ fn build_simple() {
     k9::snapshot!(
         output.tree(),
         "
-_pages/
-    introduction.md
 .codasai/
     out/
         guide.json
-    rev.toml
     guide.toml
+    rev.toml
+_pages/
+    introduction.md
 "
     );
 
@@ -38,7 +39,6 @@ _pages/
           "files": {}
         },
         "page": "<h1>Introduction</h1>\
-<p><strong>You are about to read an amazing guide!</strong></p>\
 "
       }
     ]

@@ -1,3 +1,4 @@
+use std::fs;
 use std::io::Write;
 use std::path::{Path, PathBuf};
 use std::process::Command;
@@ -6,8 +7,10 @@ use anyhow::{bail, Context, Result};
 use git2::Repository;
 use indoc::writedoc;
 use slug::slugify;
+use toml_edit as toml;
 
 use crate::opts::{PageNewOpts, PageOpts, PageSaveOpts, PageSubcmd};
+use crate::util::path;
 
 pub fn page(opts: &PageOpts) -> Result<()> {
     match opts.subcmd {
@@ -33,7 +36,7 @@ pub fn new(opts: &PageNewOpts) -> Result<()> {
 
     let new_page_path = Path::new("_pages/").join(format!("{}.md", slugify(&title)));
 
-    let mut new_page = std::fs::OpenOptions::new()
+    let mut new_page = fs::OpenOptions::new()
         .create(true)
         .write(true)
         .open(&new_page_path)
@@ -43,12 +46,15 @@ pub fn new(opts: &PageNewOpts) -> Result<()> {
         new_page,
         "
         # {}
-
-
         ",
         title
     )
     .with_context(|| format!("failed to write to file at {:?}", new_page_path))?;
+
+    let rev_toml_path = path::dotcodasai()?.join("rev.toml");
+    let mut rev_toml = fs::read_to_string(&rev_toml_path)?.parse::<toml::Document>()?;
+    rev_toml["page_path"] = toml::value(new_page_path.to_string_lossy().into_owned());
+    fs::write(&rev_toml_path, rev_toml.to_string().as_bytes())?;
 
     Ok(())
 }

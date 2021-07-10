@@ -5,6 +5,7 @@ use crate::opts::CliOpts;
 mod commands;
 mod config;
 mod opts;
+mod util;
 
 fn main() -> Result<()> {
     let opts = CliOpts::from_args();

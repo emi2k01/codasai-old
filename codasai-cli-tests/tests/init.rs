@@ -12,21 +12,10 @@ fn codasai_cli_init_simple() {
     k9::snapshot!(
         output.tree(),
         "
-_pages/
-    introduction.md
 .codasai/
-    rev.toml
     guide.toml
-"
-    );
-
-    k9::snapshot!(
-        output.contents("_pages/introduction.md"),
-        "
-# Introduction
-
-**You are about to read an amazing guide!**
-
+    rev.toml
+_pages/
 "
     );
 

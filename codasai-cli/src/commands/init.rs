@@ -42,17 +42,10 @@ fn create_dotcodasai_dir(title: &str) -> Result<()> {
     )?;
 
     // .codasai/rev.toml
-    let mut guide_toml = fs::OpenOptions::new()
+    fs::OpenOptions::new()
         .create(true)
         .write(true)
         .open("./.codasai/rev.toml")?;
-
-    writedoc!(
-        guide_toml,
-        r#"
-            page_path = "_pages/introduction.md"
-        "#,
-    )?;
 
     Ok(())
 }
@@ -61,22 +54,6 @@ fn create_pages_dir() -> Result<()> {
     let pages_path = Path::new("./_pages");
     fs::create_dir(pages_path)
         .with_context(|| format!("failed to create directory at {:?}", pages_path))?;
-
-    let introduction_md_path = Path::new("./_pages/introduction.md");
-    let mut introduction_md = fs::OpenOptions::new()
-        .create_new(true)
-        .write(true)
-        .open(introduction_md_path)
-        .with_context(|| format!("failed to create file at {:?}", introduction_md_path))?;
-
-    writedoc!(
-        introduction_md,
-        "
-            # Introduction
-
-            **You are about to read an amazing guide!**
-        "
-    )?;
 
     Ok(())
 }

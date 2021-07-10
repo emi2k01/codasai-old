@@ -1,3 +1,4 @@
+use std::cmp::Ordering;
 use std::ffi::OsStr;
 use std::iter::repeat;
 use std::path::{Path, PathBuf};
@@ -92,6 +93,7 @@ fn serialize_tree(dir: &Temp) -> String {
 
     walk_builder
         .standard_filters(false)
+        .sort_by_file_path(sort_tree_entries)
         .filter_entry(move |e| {
             e.path().strip_prefix(&dir_path).unwrap().file_name() != Some(OsStr::new(".git"))
         })
@@ -125,4 +127,18 @@ fn serialize_tree(dir: &Temp) -> String {
     let _last_newline = tree.pop();
 
     tree
+}
+
+/// Sorts the entries by the following rules
+///
+/// - A directory goes before a file
+/// - Entries of the same type are sorted lexicographically
+fn sort_tree_entries(l: &Path, r: &Path) -> Ordering {
+    if l.is_dir() && r.is_file() {
+        Ordering::Less
+    } else if r.is_file() && l.is_dir() {
+        Ordering::Greater
+    } else {
+        l.cmp(r)
+    }
 }
