@@ -1,7 +1,7 @@
 use codasai_types::{Guide, VfsDirectoryOrFile, VfsPath};
 use yew::services::keyboard::KeyListenerHandle;
 use yew::services::KeyboardService;
-use yew::{html, Component, ComponentLink, KeyboardEvent};
+use yew::{html, Component, ComponentLink, KeyboardEvent, Properties};
 
 use crate::components::{Editor, FileExplorer, Page};
 use crate::highlighted_chunk::HighlightedChunk;
@@ -12,6 +12,11 @@ pub enum AppMessage {
     KeyDown(KeyboardEvent),
     OpenFile(VfsPath),
     ChunkRels(Vec<HighlightedChunk>),
+}
+
+#[derive(Clone, PartialEq, Properties)]
+pub struct AppProps {
+    pub guide: Guide,
 }
 
 pub struct App {
@@ -25,12 +30,11 @@ pub struct App {
 
 impl Component for App {
     type Message = AppMessage;
-    type Properties = ();
+    type Properties = AppProps;
 
-    fn create(_props: Self::Properties, link: ComponentLink<Self>) -> Self {
-        let guide = Guide::from_json(include_str!("/tmp/guide.json")).unwrap();
+    fn create(props: Self::Properties, link: ComponentLink<Self>) -> Self {
         Self {
-            guide,
+            guide: props.guide,
             page_number: 0,
             _keyboard_handle: KeyboardService::register_key_down(
                 &yew::utils::window(),

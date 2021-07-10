@@ -1,7 +1,7 @@
 use structopt::StructOpt;
 
 mod build;
-mod setup;
+mod statik;
 mod util;
 
 #[derive(Debug, StructOpt)]
@@ -12,7 +12,7 @@ struct Opts {
 
 #[derive(Debug, StructOpt)]
 enum SubCmd {
-    Setup(setup::Opts),
+    Static(statik::Opts),
     Build(build::Opts),
 }
 
@@ -20,7 +20,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let opts = Opts::from_args();
 
     match opts.subcmd {
-        SubCmd::Setup(opts) => setup::run(opts)?,
+        SubCmd::Static(opts) => statik::run(opts)?,
         SubCmd::Build(opts) => build::run(opts)?,
     }
 

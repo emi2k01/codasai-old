@@ -1,3 +1,2 @@
 target/
-codasai-web/dist
-codasai-server/static/*
+codasai-server/dist
