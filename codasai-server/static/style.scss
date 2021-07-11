@@ -49,6 +49,10 @@ body {
     width: 100%;
     height: 100vh;
     display: flex;
+
+    div:nth-child(1), div:nth-child(2) {
+        margin-right: 9px;
+    }
 }
 
 .file-explorer {
@@ -85,7 +89,6 @@ body {
 .editor {
     background-color: white;
     border-radius: var(--border-radius);
-    margin-left: 9px;
     width: 45%;
     flex-shrink: 0;
     position: relative;
@@ -183,7 +186,6 @@ body {
 .page {
     flex-grow: 1;
     background-color: white;
-    margin-left: 9px;
     border-radius: var(--border-radius);
     padding: 15px;
     overflow: auto;

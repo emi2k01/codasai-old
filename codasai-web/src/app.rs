@@ -91,9 +91,9 @@ impl Component for App {
 
         html! {
             <div class="app">
-                <FileExplorer snapshot=snapshot.clone() on_open_file=open_file.clone() />
+                <Page content=snapshot.page.clone() on_open_file=open_file.clone() on_chunk_rels=on_chunk_rels />
                 { self.view_editor() }
-                <Page content=snapshot.page.clone() on_open_file=open_file on_chunk_rels=on_chunk_rels />
+                <FileExplorer snapshot=snapshot.clone() on_open_file=open_file />
 
                 { self.view_navigation() }
             </div>
