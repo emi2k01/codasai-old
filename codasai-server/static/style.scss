@@ -161,7 +161,7 @@ body {
             display: flex;
             align-items: center;
             user-select: contain;
-            width: 100%;
+            width: calc(100% - 60px);
             position: relative;
             left: 60px;
 
