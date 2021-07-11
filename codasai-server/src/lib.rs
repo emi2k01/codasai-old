@@ -1,8 +1,8 @@
 use std::path::PathBuf;
 
 use include_dir::{include_dir, Dir};
-use rocket::response::content::Html;
-use rocket::{get, routes};
+use rocket::response::content::{Html, Json};
+use rocket::{State, get, routes};
 
 use crate::file::EmbeddedFile;
 pub use crate::state::SharedState;
@@ -10,7 +10,7 @@ pub use crate::state::SharedState;
 mod file;
 mod state;
 
-const STATIC_DIR: Dir = include_dir!("./static/");
+const PUBLIC_DIR: Dir = include_dir!("./dist/");
 
 pub type GuideJson = String;
 
@@ -27,7 +27,7 @@ impl Server {
     pub fn launch(self) {
         rocket::async_main(async move {
             rocket::build()
-                .mount("/", routes![index, public])
+                .mount("/", routes![index, public, get_guide])
                 .manage(self.state)
                 .ignite()
                 .await?
@@ -40,14 +40,19 @@ impl Server {
 
 #[get("/")]
 fn index() -> Html<&'static str> {
-    let index_html = include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/static/index.html"));
+    let index_html = include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/dist/index.html"));
 
     Html(index_html)
 }
 
+#[get("/guide")]
+fn get_guide(guide: &State<SharedState<GuideJson>>) -> Json<String> {
+    Json(guide.inner().get())
+}
+
 #[get("/public/<path..>")]
 fn public(path: PathBuf) -> Option<EmbeddedFile> {
-    if let Some(file) = STATIC_DIR.get_file(&path) {
+    if let Some(file) = PUBLIC_DIR.get_file(&path) {
         Some(EmbeddedFile(file.path(), file.contents()))
     } else {
         None

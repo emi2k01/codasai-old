@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Guide</title>
-    <link href="/public/markdown.css" />
-    <link href="/public/style.css" />
+    <link media="all" rel="stylesheet" href="/public/markdown.css" />
+    <link media="all" rel="stylesheet" href="/public/style.css" />
 </head>
 <body>
     <div id="guide">
@@ -14,11 +14,20 @@
     <script type="module">
         import init, { start } from '/public/codasai_web.js';
 
-        async function run() {
+        async function run(guide) {
             await init();
-
-            start("{}", document.getElementByid("guide"));
+            start(guide, document.getElementById("guide"));
         }
+
+        let guide_req = new XMLHttpRequest();
+        guide_req.onreadystatechange = function() {
+            if (guide_req.readyState === XMLHttpRequest.DONE) {
+                run(guide_req.responseText);
+            }
+        }
+        guide_req.open("GET", "/guide");
+        guide_req.send();
+
     </script>
 </body>
 </html>
