@@ -8,9 +8,10 @@ pub fn markdown_to_html(markdown: &str) -> String {
         match e {
             md::Event::Start(md::Tag::CodeBlock(md::CodeBlockKind::Fenced(lang))) => {
                 last_lang = Some(lang.to_string());
-                md::Event::Start(md::Tag::CodeBlock(md::CodeBlockKind::Fenced(lang))) 
+                e
             },
             md::Event::Text(code) => {
+                /// Convert to an html event if we are in a fenced code block
                 if let Some(lang) = &last_lang {
                     let mut escaped_code = String::new();
                     // It seems to only fail when the writer fails????
