@@ -190,6 +190,10 @@ body {
     padding: 15px;
     overflow: auto;
     scrollbar-color: gray white;
+
+    code span {
+        font-family: inherit;
+    }
 }
 
 .navigation {

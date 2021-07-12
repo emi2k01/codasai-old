@@ -7,6 +7,10 @@ use git2::{Delta, DiffOptions, Oid, Repository, Tree};
 
 use crate::config::{GuideConfig, PageConfig};
 use crate::opts::BuildOpts;
+use self::markdown::markdown_to_html;
+
+mod highlight;
+mod markdown;
 
 pub fn build(opts: &BuildOpts) -> Result<()> {
     let guide = guide_from_git(&opts.guide)?;
@@ -232,26 +236,6 @@ fn get_page_in_rev(rev_config: &PageConfig, repo: &Repository, rev: Oid) -> Resu
     let page_content = String::from_utf8(page_blob.content().to_vec())?;
 
     Ok(page_content)
-}
-
-fn markdown_to_html(markdown: &str) -> String {
-    let mut opts = pulldown_cmark::Options::empty();
-    opts.insert(pulldown_cmark::Options::ENABLE_FOOTNOTES);
-    opts.insert(pulldown_cmark::Options::ENABLE_SMART_PUNCTUATION);
-    opts.insert(pulldown_cmark::Options::ENABLE_STRIKETHROUGH);
-    opts.insert(pulldown_cmark::Options::ENABLE_TABLES);
-    opts.insert(pulldown_cmark::Options::ENABLE_TASKLISTS);
-
-    let parser = pulldown_cmark::Parser::new_ext(&markdown, opts);
-    let mut page_html = String::new();
-    pulldown_cmark::html::push_html(&mut page_html, parser);
-
-    let clean_page_html = ammonia::Builder::new()
-        .add_generic_attributes(&["data-rel"])
-        .clean(&page_html)
-        .to_string();
-
-    clean_page_html
 }
 
 enum BlobOrDirectory {
