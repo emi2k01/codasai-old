@@ -9,7 +9,6 @@ use crate::config::{GuideConfig, PageConfig};
 use crate::opts::BuildOpts;
 use self::markdown::markdown_to_html;
 
-mod highlight;
 mod markdown;
 
 pub fn build(opts: &BuildOpts) -> Result<()> {
@@ -41,6 +40,7 @@ fn create_out_file(path: &Path) -> Result<File> {
     OpenOptions::new()
         .create(true)
         .write(true)
+        .truncate(true)
         .open(path)
         .with_context(|| format!("failed to create file {:?}", path))
 }
