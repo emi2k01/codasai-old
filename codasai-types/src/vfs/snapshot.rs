@@ -6,7 +6,7 @@ use super::VfsFilesHandle;
 use crate::vfs::VfsFile;
 use crate::VfsWalker;
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct VfsSnapshot {
     #[serde(skip)]
     pub files: VfsFilesHandle,
@@ -125,5 +125,11 @@ mod tests {
         assert_eq!(snapshot.read_file(&path), Some("fn main() {}".into()));
 
         Ok(())
+    }
+}
+
+impl PartialEq for VfsSnapshot {
+    fn eq(&self, other: &Self) -> bool {
+        self.root == other.root && self.page == other.page
     }
 }

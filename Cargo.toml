@@ -7,4 +7,3 @@ members = [
     "codasai-cli-tests",
     "xtask",
 ]
-
