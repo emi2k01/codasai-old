@@ -6,12 +6,12 @@ pub fn markdown_to_html(markdown: &str) -> String {
 
     let parser = md::Parser::new_ext(&markdown, md::Options::all()).map(move |e| {
         match e {
-            md::Event::Start(md::Tag::CodeBlock(md::CodeBlockKind::Fenced(lang))) => {
+            md::Event::Start(md::Tag::CodeBlock(md::CodeBlockKind::Fenced(ref lang))) => {
                 last_lang = Some(lang.to_string());
                 e
             },
             md::Event::Text(code) => {
-                /// Convert to an html event if we are in a fenced code block
+                // Convert to an html event if we are in a fenced code block
                 if let Some(lang) = &last_lang {
                     let mut escaped_code = String::new();
                     // It seems to only fail when the writer fails????
