@@ -12,13 +12,11 @@ pub fn markdown_to_html(markdown: &str) -> String {
             },
             md::Event::Text(code) => {
                 // Convert to an html event if we are in a fenced code block
-                if let Some(lang) = &last_lang {
+                if let Some(lang) = last_lang.take() {
                     let mut escaped_code = String::new();
                     // It seems to only fail when the writer fails????
                     md::escape::escape_html(&mut escaped_code, &code.to_string().trim()).unwrap();
-                    let highlighted = highlight_codeblock(&escaped_code, lang);
-
-                    last_lang = None;
+                    let highlighted = highlight_codeblock(&escaped_code, &lang);
 
                     md::Event::Html(CowStr::from(highlighted))
                 } else {
