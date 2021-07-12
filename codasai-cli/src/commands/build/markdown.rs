@@ -2,16 +2,9 @@ use md::CowStr;
 use pulldown_cmark as md;
 
 pub fn markdown_to_html(markdown: &str) -> String {
-    let mut opts = pulldown_cmark::Options::empty();
-    opts.insert(md::Options::ENABLE_FOOTNOTES);
-    opts.insert(md::Options::ENABLE_SMART_PUNCTUATION);
-    opts.insert(md::Options::ENABLE_STRIKETHROUGH);
-    opts.insert(md::Options::ENABLE_TABLES);
-    opts.insert(md::Options::ENABLE_TASKLISTS);
-
     let mut last_lang = None;
 
-    let parser = md::Parser::new_ext(&markdown, opts).map(move |e| {
+    let parser = md::Parser::new_ext(&markdown, md::Options::all()).map(move |e| {
         match e {
             md::Event::Start(md::Tag::CodeBlock(md::CodeBlockKind::Fenced(lang))) => {
                 last_lang = Some(lang.to_string());
