@@ -3,6 +3,8 @@ use yew::{classes, html, Component, Properties};
 
 use crate::highlighted_chunk::HighlightedChunk;
 
+mod highlight;
+
 #[derive(Debug, Clone, PartialEq, Properties)]
 pub struct EditorProperties {
     pub name: String,
