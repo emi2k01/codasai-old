@@ -1,4 +1,4 @@
 /target
-codasai-web/dist
+codasai-server/dist
 **/*.vim
 notes.txt

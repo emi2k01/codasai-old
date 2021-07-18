@@ -3,6 +3,9 @@ use yew::{classes, html, Component, Properties};
 
 use crate::highlighted_chunk::HighlightedChunk;
 
+use self::highlight::highlight_and_diff_code;
+
+mod escape;
 mod highlight;
 
 #[derive(Debug, Clone, PartialEq, Properties)]
@@ -30,7 +33,7 @@ impl Component for Editor {
     type Properties = EditorProperties;
 
     fn create(props: Self::Properties, link: yew::ComponentLink<Self>) -> Self {
-        let (old_content, new_content) = diffed_content_from_properties(&props);
+        let (old_content, new_content) = highlight_and_diff_code(props.old_content.as_deref().unwrap_or(""), &props.new_content, "rs");
 
         Self {
             props,
@@ -57,7 +60,7 @@ impl Component for Editor {
         if self.props != props {
             self.showing_old = false;
 
-            let (old_content, new_content) = diffed_content_from_properties(&props);
+            let (old_content, new_content) = highlight_and_diff_code(props.old_content.as_deref().unwrap_or(""), &props.new_content, "rs");
             self.old_content = old_content;
             self.new_content = new_content;
 
