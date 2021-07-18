@@ -91,7 +91,7 @@ impl Component for Editor {
                     <i hidden=icon_hidden class="diff-icon diff-old-icon fas fa-minus-square"></i>
                 </div>
                 <div class="inner">
-                    { for content.split('\n').enumerate().map(|(n, l)| self.view_line(l, n+1)) }
+                    { for content.split_inclusive('\n').enumerate().map(|(n, l)| self.view_line(l, n+1)) }
                 </div>
             </div>
         }
